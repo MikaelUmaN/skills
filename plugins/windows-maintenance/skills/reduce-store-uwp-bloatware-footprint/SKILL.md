@@ -4,6 +4,7 @@ description: List, categorize, and remove pre-installed Microsoft Store/UWP bloa
 license: Apache-2.0
 compatibility: Requires Windows with PowerShell and permission to remove Appx/UWP packages.
 disable-model-invocation: true
+user-invocable: true
 allowed-tools: Bash(powershell.exe *)
 ---
 

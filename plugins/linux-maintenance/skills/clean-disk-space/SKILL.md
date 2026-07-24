@@ -3,6 +3,7 @@ name: clean-disk-space
 description: Reclaim disk space on Linux by finding large, old, or unused files and pruning them safely with per-category confirmation. Two modes — "safe" (dangling Docker images/containers, old logs, crash/core dumps, package caches, trash, stale temp files, large long-unused files) and "thorough" (largest culprits overall, build artifacts, all unused Docker objects, old kernels). Always shows disk status and per-category potential savings, and ALWAYS asks before deleting. Use when asked to "clean disk", "free up space", "disk is full", "prune docker", "what's eating my disk", or "clean-disk-space".
 license: Apache-2.0
 compatibility: Requires Linux with bash. Operates only on local filesystems and never touches WSL, Windows, or network mounts.
+disable-model-invocation: true
 user-invocable: true
 ---
 

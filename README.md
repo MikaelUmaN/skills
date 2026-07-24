@@ -53,7 +53,7 @@ marketplace `tags`. Install only what fits the environment you're in.
 
 ```
 /plugin marketplace add MikaelUmaN/skills
-/plugin install windows-maintenance@mikael-skills
+/plugin install windows-maintenance@rainysoft-skills
 ```
 
 That one plugin provides all four skills, namespaced as `/windows-maintenance:compress-wsl`,
@@ -67,7 +67,7 @@ Native-Windows Claude Code and Claude Code inside WSL are **separate installs** 
 - **Add the marketplace in each environment separately, via the GitHub remote** — not a local
   path (adding a local path from WSL trips a known updater bug that drops a stray directory).
 - **Install per environment.** These four skills are Windows-invoked; install them in Windows CC.
-- Update with `/plugin marketplace update mikael-skills` (run per environment); a running session
+- Update with `/plugin marketplace update rainysoft-skills` (run per environment); a running session
   keeps launch-time versions until `/reload-plugins` or restart.
 
 ## Adding a skill or domain

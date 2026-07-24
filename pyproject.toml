@@ -1,7 +1,7 @@
 [project]
-name = "mikael-skills-tools"
+name = "rainysoft-skills-tools"
 version = "1.0.0"
-description = "Validation tooling for the mikael-skills Agent Skills marketplace"
+description = "Validation tooling for the rainysoft-skills Agent Skills marketplace"
 requires-python = ">=3.10"
 dependencies = ["pyyaml>=6"]
 

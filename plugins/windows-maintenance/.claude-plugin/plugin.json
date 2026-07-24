@@ -1,0 +1,9 @@
+{
+  "name": "windows-maintenance",
+  "description": "Windows & WSL optimization and maintenance skills: compress-wsl, clean-disk-space, reduce-memory-footprint, and reduce-store-uwp-bloatware-footprint. Each skill reports first and asks before making changes.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Mikael Öhman",
+    "email": "mikael.ohman@lynxhedge.se"
+  }
+}

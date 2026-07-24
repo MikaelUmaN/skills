@@ -1,0 +1,13 @@
+[project]
+name = "mikael-skills-tools"
+version = "1.0.0"
+description = "Validation tooling for the mikael-skills Agent Skills marketplace"
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.uv]
+# This repo ships skills + tooling, not an installable package.
+package = false

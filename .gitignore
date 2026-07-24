@@ -1,0 +1,12 @@
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.uv/
+
+# OS / editor junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp

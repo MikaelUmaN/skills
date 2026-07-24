@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "mikael-skills",
+  "description": "Engine-neutral Agent Skills (agentskills.io) with a thin Claude Code wrapper. Domain-grouped plugins; Codex wrapper to follow.",
+  "owner": {
+    "name": "Mikael Öhman",
+    "email": "mikael.ohman@lynxhedge.se"
+  },
+  "plugins": [
+    {
+      "name": "windows-maintenance",
+      "description": "[Windows] Windows & WSL optimization and maintenance skills: compact the WSL2 disk, clean disk space, reduce memory footprint, and remove Store/UWP bloatware. Each asks before changing anything.",
+      "source": "./plugins/windows-maintenance",
+      "category": "productivity",
+      "tags": ["windows", "wsl", "maintenance", "disk-space", "memory", "debloat"]
+    }
+  ]
+}

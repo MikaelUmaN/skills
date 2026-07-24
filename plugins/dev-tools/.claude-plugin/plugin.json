@@ -1,7 +1,7 @@
 {
   "name": "dev-tools",
-  "description": "Cross-platform developer tooling skills: run a fast git-history audit of a repository (churn, bus factor, bug clusters, momentum, firefighting) and present it as a clean README-style report.",
-  "version": "1.0.0",
+  "description": "Developer tooling skills: run a fast git-history audit of a repository (git-code-audit), review a feature branch against a target branch (feature-review), export Jupyter notebook plots to PNGs by section (export-jupyter-notebook-plots), and clean up stale VS Code/Jupyter/Claude processes on WSL2 (cleanup-vscode).",
+  "version": "1.1.0",
   "author": {
     "name": "Mikael Öhman",
     "email": "mikael.ohman@lynxhedge.se"

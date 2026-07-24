@@ -23,10 +23,10 @@
     },
     {
       "name": "dev-tools",
-      "description": "[Cross-platform] Developer tooling skills: run a fast git-history audit of a repository — churn, bus factor, bug clusters, momentum, firefighting — and present it as a clean README-style report.",
+      "description": "[Cross-platform] Developer tooling skills: git-history audit (git-code-audit), feature-branch review (feature-review), export Jupyter notebook plots to PNGs by section (export-jupyter-notebook-plots), and WSL2 cleanup of stale VS Code, Jupyter, and Claude Code processes (cleanup-vscode). Each reports first and asks before changing anything.",
       "source": "./plugins/dev-tools",
       "category": "productivity",
-      "tags": ["git", "audit", "code-review", "onboarding"]
+      "tags": ["git", "audit", "code-review", "onboarding", "jupyter", "notebook", "cleanup", "wsl"]
     }
   ]
 }

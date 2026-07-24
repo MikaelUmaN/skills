@@ -1,0 +1,9 @@
+{
+  "name": "linux-maintenance",
+  "description": "Linux system maintenance skills: reclaim disk space by finding large, old, or unused files and pruning them with per-category confirmation. Reports first and asks before making changes; never touches WSL, Windows, or network mounts.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Mikael Öhman",
+    "email": "mikael.ohman@lynxhedge.se"
+  }
+}

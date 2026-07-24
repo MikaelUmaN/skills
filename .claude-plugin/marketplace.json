@@ -13,6 +13,20 @@
       "source": "./plugins/windows-maintenance",
       "category": "productivity",
       "tags": ["windows", "wsl", "maintenance", "disk-space", "memory", "debloat"]
+    },
+    {
+      "name": "linux-maintenance",
+      "description": "[Linux] Linux system maintenance skills: reclaim disk space by finding large, old, or unused files and pruning them with per-category confirmation. Reports first and asks before changing anything; never touches WSL, Windows, or network mounts.",
+      "source": "./plugins/linux-maintenance",
+      "category": "productivity",
+      "tags": ["linux", "maintenance", "disk-space", "docker", "cleanup"]
+    },
+    {
+      "name": "dev-tools",
+      "description": "[Cross-platform] Developer tooling skills: run a fast git-history audit of a repository — churn, bus factor, bug clusters, momentum, firefighting — and present it as a clean README-style report.",
+      "source": "./plugins/dev-tools",
+      "category": "productivity",
+      "tags": ["git", "audit", "code-review", "onboarding"]
     }
   ]
 }

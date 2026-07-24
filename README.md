@@ -37,7 +37,9 @@ Both would point at the **same** `skills/` directories. (`.agents/plugins/market
 Codex path, not a neutral one — the Agent Skills standard defines skills + `.agents/skills/`
 discovery, not marketplaces.)
 
-## Skills (domain: `windows-maintenance`)
+## Skills
+
+### Domain: `windows-maintenance`
 
 | Skill | Platform | What it does |
 |-------|----------|--------------|
@@ -46,6 +48,22 @@ discovery, not marketplaces.)
 | `reduce-memory-footprint` | Windows | Trim services, startup apps, and processes interactively. |
 | `reduce-store-uwp-bloatware-footprint` | Windows | Remove pre-installed Store/UWP bloatware, with a keep-list. |
 
+### Domain: `linux-maintenance`
+
+| Skill | Platform | What it does |
+|-------|----------|--------------|
+| `clean-disk-space` | Linux | Read-only disk scan then per-category quarantine-then-delete: Docker, logs, crash dumps, caches, trash, temp, large-unused files, build artifacts. Never touches WSL/Windows/network mounts. |
+
+### Domain: `dev-tools`
+
+| Skill | Platform | What it does |
+|-------|----------|--------------|
+| `git-code-audit` | Cross-platform (needs `git`) | Profile a repo's history — churn, bus factor, bug clusters, momentum, firefighting — into a clean README-style report before reading the code. |
+
+The Linux and Windows `clean-disk-space` skills intentionally share a name; they are
+distinct skills disambiguated by install namespace (`linux-maintenance:clean-disk-space`
+vs `windows-maintenance:clean-disk-space`).
+
 Platform is a convention (no engine enforces OS gating) surfaced via the `compatibility` field and
 marketplace `tags`. Install only what fits the environment you're in.
 
@@ -53,11 +71,14 @@ marketplace `tags`. Install only what fits the environment you're in.
 
 ```
 /plugin marketplace add MikaelUmaN/skills
-/plugin install windows-maintenance@rainysoft-skills
+/plugin install windows-maintenance@rainysoft-skills   # Windows/WSL maintenance (four skills)
+/plugin install linux-maintenance@rainysoft-skills     # Linux disk cleanup
+/plugin install dev-tools@rainysoft-skills             # git-code-audit
 ```
 
-That one plugin provides all four skills, namespaced as `/windows-maintenance:compress-wsl`,
-`/windows-maintenance:clean-disk-space`, etc.
+Each plugin's skills are namespaced by domain, e.g. `/windows-maintenance:compress-wsl`,
+`/linux-maintenance:clean-disk-space`, `/dev-tools:git-code-audit`. Install only the
+domains that fit your environment.
 
 ## Running across Windows and WSL
 

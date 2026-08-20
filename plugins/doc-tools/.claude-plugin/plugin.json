@@ -1,0 +1,9 @@
+{
+  "name": "doc-tools",
+  "description": "Documentation authoring skills: write or restructure a document as a strictly hierarchical, isolated tree where every section owns only its subtree and each overview enumerates its direct children (hierarchical-document). Reports the planned structure and asks before restructuring an existing document.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Mikael Öhman",
+    "email": "mikaeluman@gmail.com"
+  }
+}

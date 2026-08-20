@@ -12,6 +12,6 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
       - name: Validate marketplaces and skills
-        run: uv run tools/validate_marketplaces.py
+        run: uv run --frozen tools/validate_marketplaces.py
       - name: Run tests
-        run: uv run --group dev pytest -q
+        run: uv run --frozen --group dev pytest -q

@@ -4,7 +4,7 @@
   "description": "Engine-neutral Agent Skills (agentskills.io) with a thin Claude Code wrapper. Domain-grouped plugins; Codex wrapper to follow.",
   "owner": {
     "name": "Mikael Öhman",
-    "email": "mikael.ohman@lynxhedge.se"
+    "email": "mikaeluman@gmail.com"
   },
   "plugins": [
     {
@@ -27,6 +27,13 @@
       "source": "./plugins/dev-tools",
       "category": "productivity",
       "tags": ["git", "audit", "code-review", "onboarding", "jupyter", "notebook", "cleanup", "wsl"]
+    },
+    {
+      "name": "doc-tools",
+      "description": "[Cross-platform] Documentation authoring skills: write or restructure a document as a strictly hierarchical, isolated tree (hierarchical-document). Reports the planned structure and asks before restructuring an existing document.",
+      "source": "./plugins/doc-tools",
+      "category": "productivity",
+      "tags": ["documentation", "markdown", "writing", "structure", "hierarchy"]
     }
   ]
 }

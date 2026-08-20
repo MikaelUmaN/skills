@@ -25,9 +25,10 @@ tests/  pyproject.toml  .github/workflows/validate.yml
 ```
 
 Each skill's `SKILL.md` carries only the standard frontmatter fields (`name`, `description`,
-`license`, `compatibility`) plus two Claude behavior flags (`disable-model-invocation`,
-`user-invocable`) that other engines safely ignore. Scripts are referenced relative to the skill
-directory (`<skill-dir>\scripts\…`), never by an absolute machine path.
+`license`, `compatibility`) plus a few minimal engine behavior flags (`user-invocable`,
+`disable-model-invocation`, `allowed-tools`, `argument-hint`, `context`) that other engines safely
+ignore. Scripts are referenced relative to the skill directory (`<skill-dir>\scripts\…`), never by
+an absolute machine path.
 
 ### Deferred (Codex wrappers — documented, not yet created)
 - `.agents/plugins/marketplace.json` — the **Codex** marketplace catalog.
@@ -59,6 +60,15 @@ discovery, not marketplaces.)
 | Skill | Platform | What it does |
 |-------|----------|--------------|
 | `git-code-audit` | Cross-platform (needs `git`) | Profile a repo's history — churn, bus factor, bug clusters, momentum, firefighting — into a clean README-style report before reading the code. |
+| `feature-review` | Cross-platform (needs `git`) | Review a feature branch against a target branch — technology choices, architecture, style, tests — then summarize contributions and risk areas. |
+| `export-jupyter-notebook-plots` | Cross-platform (needs `uv`) | Extract every plot from a `.ipynb` as PNGs, foldered by markdown header section. |
+| `cleanup-vscode` | Linux/WSL2 | Find and kill stale VS Code servers, language servers, Jupyter kernels, and Claude Code instances, and prune orphaned kernel connection files. |
+
+### Domain: `doc-tools`
+
+| Skill | Platform | What it does |
+|-------|----------|--------------|
+| `hierarchical-document` | Cross-platform | Write or restructure a document as a strict tree — a manifest built and frozen first, every overview enumerating exactly its direct children, every section confined to its own subtree, no cross-branch links. Reports the planned structure and asks before restructuring an existing document. |
 
 The Linux and Windows `clean-disk-space` skills intentionally share a name; they are
 distinct skills disambiguated by install namespace (`linux-maintenance:clean-disk-space`
@@ -73,12 +83,13 @@ marketplace `tags`. Install only what fits the environment you're in.
 /plugin marketplace add MikaelUmaN/skills
 /plugin install windows-maintenance@rainysoft-skills   # Windows/WSL maintenance (four skills)
 /plugin install linux-maintenance@rainysoft-skills     # Linux disk cleanup
-/plugin install dev-tools@rainysoft-skills             # git-code-audit
+/plugin install dev-tools@rainysoft-skills             # git/notebook/process developer tooling
+/plugin install doc-tools@rainysoft-skills             # hierarchical document authoring
 ```
 
 Each plugin's skills are namespaced by domain, e.g. `/windows-maintenance:compress-wsl`,
-`/linux-maintenance:clean-disk-space`, `/dev-tools:git-code-audit`. Install only the
-domains that fit your environment.
+`/linux-maintenance:clean-disk-space`, `/dev-tools:git-code-audit`,
+`/doc-tools:hierarchical-document`. Install only the domains that fit your environment.
 
 ## Running across Windows and WSL
 
@@ -87,7 +98,7 @@ Native-Windows Claude Code and Claude Code inside WSL are **separate installs** 
 
 - **Add the marketplace in each environment separately, via the GitHub remote** — not a local
   path (adding a local path from WSL trips a known updater bug that drops a stray directory).
-- **Install per environment.** These four skills are Windows-invoked; install them in Windows CC.
+- **Install per environment.** The `windows-maintenance` skills are Windows-invoked; install them in Windows CC.
 - Update with `/plugin marketplace update rainysoft-skills` (run per environment); a running session
   keeps launch-time versions until `/reload-plugins` or restart.
 
@@ -99,7 +110,8 @@ Native-Windows Claude Code and Claude Code inside WSL are **separate installs** 
    no unquoted `: `), and optionally `license`/`compatibility`. Engine-specific behavior flags are
    allowed but kept minimal.
 3. Ensure a `plugins/<domain>/.claude-plugin/plugin.json` exists and the domain is listed in
-   `.claude-plugin/marketplace.json`.
+   `.claude-plugin/marketplace.json` — the validator fails on a plugin directory no catalog entry
+   points at, since it would be undiscoverable.
 4. Run the validator (below) before committing.
 
 ## Validate
@@ -109,9 +121,12 @@ The validator answers, per engine: **"can it discover, parse, install, and load 
 from each engine's wrapper (Codex shows `SKIP` until its wrapper exists).
 
 ```
-uv run tools/validate_marketplaces.py     # requires uv (astral.sh/uv); bootstraps Python + deps
-uv run --group dev pytest -q              # tests
+uv run --frozen tools/validate_marketplaces.py   # requires uv (astral.sh/uv); bootstraps Python + deps
+uv run --frozen --group dev pytest -q            # tests
 ```
+
+`--frozen` keeps a locally configured package index from re-resolving and rewriting `uv.lock`
+as a side effect of running the tooling.
 
 CI runs both on every push/PR (`.github/workflows/validate.yml`).
 

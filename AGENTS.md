@@ -48,13 +48,18 @@ discovery, not marketplaces.
 
 ## Current contents
 
-Three domain plugins exist today:
+Four domain plugins exist today:
 
 - **`windows-maintenance`** — four Windows/WSL skills: `compress-wsl`,
   `clean-disk-space`, `reduce-memory-footprint`, `reduce-store-uwp-bloatware-footprint`.
 - **`linux-maintenance`** — `clean-disk-space` (Linux/bash disk cleanup with
   per-category confirmation).
-- **`dev-tools`** — `git-code-audit` (cross-platform git-history health report).
+- **`dev-tools`** — four cross-platform developer skills: `git-code-audit` (git-history
+  health report), `feature-review` (feature branch vs target branch),
+  `export-jupyter-notebook-plots` (notebook plots to PNGs by section), `cleanup-vscode`
+  (stale VS Code/Jupyter/Claude processes on WSL2).
+- **`doc-tools`** — `hierarchical-document` (write or restructure a document as a strict
+  tree with isolated subtrees and exact overviews).
 
 Each skill reports state first and asks before changing anything. "Platform" is a
 convention surfaced via the `compatibility` field and marketplace `tags`; no engine
@@ -67,7 +72,8 @@ install namespace (`linux-maintenance:clean-disk-space` vs
 
 - `SKILL.md` frontmatter carries only standard fields (`name`, `description`,
   `license`, `compatibility`) plus minimal engine-specific behavior flags
-  (`disable-model-invocation`, `user-invocable`) that other engines safely ignore.
+  (`user-invocable`, `disable-model-invocation`, `allowed-tools`, `argument-hint`,
+  `context`) that other engines safely ignore.
 - `name` is kebab-case, **must equal the skill directory name**, ≤64 chars.
 - `description` is ≤1024 chars with no unquoted `: ` sequence.
 - Reference scripts **relative to the skill directory** (`<skill-dir>\scripts\<file>`),
@@ -78,7 +84,8 @@ install namespace (`linux-maintenance:clean-disk-space` vs
 1. Create `plugins/<domain>/skills/<name>/SKILL.md` (+ `scripts/` if needed).
 2. Fill frontmatter per the conventions above.
 3. Ensure `plugins/<domain>/.claude-plugin/plugin.json` exists and the domain is
-   listed in `.claude-plugin/marketplace.json`.
+   listed in `.claude-plugin/marketplace.json` — the validator fails on a plugin
+   directory that no catalog entry points at, since it would be undiscoverable.
 4. Run the validator (below) before committing.
 
 ## Validate
@@ -89,9 +96,13 @@ skill?"** `parse`/`load` are engine-neutral (shared `SKILL.md` + scripts);
 wrapper exists).
 
 ```
-uv run tools/validate_marketplaces.py     # requires uv (astral.sh/uv); bootstraps Python + deps
-uv run --group dev pytest -q              # tests
+uv run --frozen tools/validate_marketplaces.py   # requires uv (astral.sh/uv); bootstraps Python + deps
+uv run --frozen --group dev pytest -q            # tests
 ```
+
+Pass `--frozen` so a locally configured package index cannot re-resolve and rewrite
+`uv.lock` as a side effect of running the tooling. The lock must stay pinned to public
+PyPI; check `git status uv.lock` is clean before committing.
 
 CI runs both on every push/PR (`.github/workflows/validate.yml`).
 

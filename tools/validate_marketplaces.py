@@ -11,8 +11,8 @@ We split the four verbs into engine-neutral vs engine-specific:
                         Agent Skills open standard (agentskills.io).
   * load    (neutral) - name == directory, referenced scripts exist, and no
                         machine/engine-specific absolute paths leaked into the body.
-  * discover (per-engine) - the engine's marketplace catalog lists the plugin
-                            and its source resolves.
+  * discover (per-engine) - the engine's marketplace catalog lists every plugin
+                            directory and each source resolves.
   * install  (per-engine) - the engine's per-plugin manifest is present and valid.
 
 Neutral results are shared by every engine. Engine-specific results come from the
@@ -139,11 +139,11 @@ def discover_skills() -> list[Path]:
     return sorted(p.parent for p in PLUGINS_DIR.glob("*/skills/*/SKILL.md"))
 
 
-def validate_claude_wrapper() -> tuple[list[str], list[str]]:
+def validate_claude_wrapper(root: Path = REPO_ROOT) -> tuple[list[str], list[str]]:
     """Return (discover_errors, install_errors) for the Claude wrapper."""
     discover: list[str] = []
     install: list[str] = []
-    mkt = REPO_ROOT / ".claude-plugin" / "marketplace.json"
+    mkt = root / ".claude-plugin" / "marketplace.json"
     if not mkt.is_file():
         return ["missing .claude-plugin/marketplace.json"], ["(skipped - no marketplace)"]
     try:
@@ -159,13 +159,15 @@ def validate_claude_wrapper() -> tuple[list[str], list[str]]:
     if not isinstance(plugins, list) or not plugins:
         discover.append("marketplace.json: 'plugins' must be a non-empty list")
         return discover, install
+    registered: set[str] = set()
     for entry in plugins:
         pname = entry.get("name")
         source = entry.get("source")
         if not pname or not source:
             discover.append(f"marketplace.json: plugin entry needs 'name' and 'source': {entry}")
             continue
-        pdir = (REPO_ROOT / source).resolve()
+        registered.add(pname)
+        pdir = (root / source).resolve()
         if not pdir.is_dir():
             discover.append(f"marketplace.json: source for {pname!r} does not resolve: {source}")
             continue
@@ -182,6 +184,15 @@ def validate_claude_wrapper() -> tuple[list[str], list[str]]:
             install.append(f"{pname}: plugin.json 'name' ({man.get('name')!r}) != marketplace entry {pname!r}")
         if not man.get("description"):
             install.append(f"{pname}: plugin.json missing 'description'")
+
+    # A plugin directory that no catalog entry points at is undiscoverable and
+    # uninstallable, so treat the omission as a discover failure.
+    for pdir in sorted((root / "plugins").glob("*/.claude-plugin/plugin.json")):
+        domain = pdir.parent.parent.name
+        if domain not in registered:
+            discover.append(
+                f"marketplace.json: plugin directory plugins/{domain} is not listed in the catalog"
+            )
     return discover, install
 
 
@@ -201,7 +212,7 @@ def validate_repo(root: Path = REPO_ROOT):
         neutral_errs.extend(check_skill(s))
     parse_load_ok = not neutral_errs
 
-    c_disc_errs, c_inst_errs = validate_claude_wrapper()
+    c_disc_errs, c_inst_errs = validate_claude_wrapper(root)
     codex_present = codex_wrapper_present()
 
     def status(ok: bool) -> str:
